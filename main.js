@@ -49,13 +49,13 @@ function createWindow(defaultConfig = true) {
     win.on('closed', () => win = null)
 }
 
-function createPopup(url, service){
+function createPopup(url, service, size, force){
     let display = electron.screen.getPrimaryDisplay();
 
     popup = new BrowserWindow({
-        width: 720, height: 480,
-        x: display.workAreaSize.width - 725,
-        y: display.workAreaSize.height - 485,
+        width: size.width ? size.width : 720, height: size.height ? size.height : 480,
+        x: display.workAreaSize.width - (size.width ? size.width : 720) - 5,
+        y: display.workAreaSize.height - (size.height ? size.height : 480) - 5,
         frame: false,
         alwaysOnTop: true,
         webPreferences: {plugins: true}
@@ -80,15 +80,19 @@ function createPopup(url, service){
     Menu.setApplicationMenu(appMenu);
     popup.setMenuBarVisibility(false);
 
-    popup.embedStreamURL = url;
-    popup.providerService = service;
-    popup.closeAll = function(){
-        popup.close();
-        win.close();
-    };
-    popup.loadFile(config.EMBED_PAGE);
+    if(!force){
+        popup.embedStreamURL = url;
+        popup.providerService = service;
+        popup.closeAll = function(){
+            popup.close();
+            win.close();
+        };
+        popup.loadFile(config.EMBED_PAGE);
+    } else {
+        popup.loadURL(url);
+    }
 
-    popup.on('closed', () => { popup = null; win.close(); });
+    popup.on('closed', () => { popup = null; if(win) win.close(); });
     popup.setSkipTaskbar(false)
 }
 
@@ -98,7 +102,7 @@ function setupIPC(){
         if(service){
             let embedURL = service(result.streamURL);
             if(embedURL){
-                restartPIP(embedURL, result.service);
+                restartPIP(embedURL, result.service, result.size, false);
             } else {
                 win.loadFile(config.INDEX_PAGE);
             }
@@ -106,10 +110,10 @@ function setupIPC(){
     });
 }
 
-function restartPIP(url, service) {
+function restartPIP(url, service, force) {
     win.hide();
     console.log('Embed Stream URL:', url);
-    createPopup(url, service)
+    createPopup(url, service, force)
 }
 
 app.on('ready', createWindow);

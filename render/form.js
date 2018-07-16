@@ -11,9 +11,12 @@ window.addEventListener('load', function () {
         e.preventDefault();
         let $url = $form[0].value;
         let $service = $form[1].value;
+        let $width = parseInt($form[2].value);
+        let $height = parseInt($form[3].value);
+        console.log(e);
         if($service !== 'Choose Service' && $url.length > 0 && validate($url, $service)){
-            $form[2].classList.add('is-loading');
-            setTimeout(() => ipc.send('bridge-post', {service: $service, streamURL: $url}), 100);
+            $form[4].classList.add('is-loading');
+            setTimeout(() => ipc.send('bridge-post', {service: $service, streamURL: $url, size: {width: $width, height: $height}}), 250);
         } else {
             if($service === 'Choose Service'){
                 $form[1].parentNode.classList.add('is-danger');
