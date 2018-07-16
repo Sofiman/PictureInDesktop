@@ -66,7 +66,7 @@
 
     <iframe id="embed"></iframe>
 
-    <script>let cw=require('electron').remote.getCurrentWindow();document.querySelector('#embed').src=cw.embedStreamURL;document.querySelector('#open').href=cw.embedStreamURL.replace('embed/', 'watch?v=');document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
+    <script>let rp={'Youtube':['/embed',''],'Twitch':['http://player.twitch.tv/?channel=','https://twitch.tv/']};let cw=require('electron').remote.getCurrentWindow();let esurl=cw.embedStreamURL;let psv=cw.providerService;document.querySelector('#embed').src=esurl;document.querySelector('#open').href=esurl.replace(rp[psv][0],rp[psv][1]);document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
 
 </body>
 </html>

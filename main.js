@@ -49,7 +49,7 @@ function createWindow(defaultConfig = true) {
     win.on('closed', () => win = null)
 }
 
-function createPopup(url){
+function createPopup(url, service){
     let display = electron.screen.getPrimaryDisplay();
 
     popup = new BrowserWindow({
@@ -81,6 +81,7 @@ function createPopup(url){
     popup.setMenuBarVisibility(false);
 
     popup.embedStreamURL = url;
+    popup.providerService = service;
     popup.closeAll = function(){
         popup.close();
         win.close();
@@ -96,15 +97,15 @@ function setupIPC(){
         let service = config.SERVICES[result.service];
         if(service){
             let embedURL = service(result.streamURL);
-            restartPIP(embedURL);
+            restartPIP(embedURL, result.service);
         }
     });
 }
 
-function restartPIP(url) {
+function restartPIP(url, service) {
     win.hide();
     console.log('Embed Stream URL:', url);
-    createPopup(url)
+    createPopup(url, service)
 }
 
 app.on('ready', createWindow);
