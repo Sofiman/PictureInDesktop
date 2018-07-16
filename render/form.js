@@ -1,4 +1,5 @@
-const {ipcRenderer: ipc} = require('electron');
+const {ipcRenderer: ipc, remote} = require('electron');
+const currentWindow = remote.getCurrentWindow();
 
 let patterns = {
     'TF1': /.*/,
@@ -6,17 +7,27 @@ let patterns = {
 };
 
 window.addEventListener('load', function () {
+    let $close = document.getElementById('close');
+    let $errorNotification = $close.parentNode;
+    $close.addEventListener('click', function(){
+        $errorNotification.classList.add('hidden');
+    });
+    if(currentWindow.error){
+        $errorNotification.classList.remove('hidden');
+        $errorNotification.querySelector('div').innerHTML = currentWindow.error;
+    }
+
     let $form = document.querySelector('form');
     $form.addEventListener('submit', function (e){
         e.preventDefault();
         let $url = $form[0].value;
         let $service = $form[1].value;
-        let $width = parseInt($form[2].value);
-        let $height = parseInt($form[3].value);
-        console.log(e);
+        let $width = $form[2].value;
+        let $height = $form[3].value;
+        let $force = $form[4].checked;
         if($service !== 'Choose Service' && $url.length > 0 && validate($url, $service)){
-            $form[4].classList.add('is-loading');
-            setTimeout(() => ipc.send('bridge-post', {service: $service, streamURL: $url, size: {width: $width, height: $height}}), 250);
+            $form[5].classList.add('is-loading');
+            setTimeout(() => ipc.send('bridge-post', {service: $service, streamURL: $url, size: {width: parseInt($width), height: parseInt($height)}, force: $force}), 250);
         } else {
             if($service === 'Choose Service'){
                 $form[1].parentNode.classList.add('is-danger');

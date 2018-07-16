@@ -16,6 +16,7 @@
     "electron-packager": "^12.1.0"
   },
   "dependencies": {
-    "bulma": "^0.7.1"
+    "bulma": "^0.7.1",
+    "bulma-checkradio": "^2.1.0"
   }
 }

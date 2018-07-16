@@ -13,8 +13,7 @@ function toSeconds(time){
 
 module.exports =  {
     WIDTH: 800,
-    HEIGHT: 305,
-    toSeconds,
+    HEIGHT: 340,
 
     INDEX_PAGE: 'render/index.html',
     EMBED_PAGE: 'render/embed.html',

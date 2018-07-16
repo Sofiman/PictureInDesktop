@@ -12,6 +12,11 @@
 </head>
 <body>
 
+    <div class="notification is-danger hidden">
+        <button class="delete" id="close"></button>
+        <div></div>
+    </div>
+
     <form>
         <div class="columns">
             <div class="column field">
@@ -45,6 +50,11 @@
                 <label class="label">Height</label>
                 <input type="number" class="input" value="480" min="0" id="height">
             </div>
+        </div>
+
+        <div class="field">
+            <input class="is-checkradio is-info is-small" id="force" type="checkbox">
+            <label for="force">Force (Warning: Controls are not available)</label>
         </div>
 
         <div class="field">
