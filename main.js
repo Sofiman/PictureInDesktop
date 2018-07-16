@@ -19,7 +19,7 @@ function createWindow(defaultConfig = true) {
         label: 'Developers',
         submenu: [
             {
-                label: 'Toggle Dev Tools',
+                label: 'Toggle DevTools',
                 accelerator: 'CmdOrCtrl+Shift+I',
                 click() { win.webContents.openDevTools() }
             }
@@ -49,7 +49,8 @@ function createPopup(url){
         frame: false,
         alwaysOnTop: true,
         modal: true,
-        parent: win
+        parent: win,
+        webPreferences: {plugins: true}
     });
 
     const appMenu = Menu.buildFromTemplate([{
