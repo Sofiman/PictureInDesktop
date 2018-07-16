@@ -59,6 +59,9 @@ module.exports =  {
         'TF1': function getStreamURL(){
             return 'https://www.wat.tv/embedframe/liveV4'
         },
+        'File': function getStreamURL(inputURL){
+            return `file://${inputURL}`
+        },
 
         'Custom': function getStreamURL(inputURL){
             return inputURL;

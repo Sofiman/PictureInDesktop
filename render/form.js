@@ -3,7 +3,8 @@ const {ipcRenderer: ipc} = require('electron');
 let $submit;
 let patterns = {
     'TF1': /.*/,
-    'Spotify': /spotify:(album|track|artist):.*|((?:https?:)?\/\/)?open.spotify.com\/album\/(.*)/g
+    'Spotify': /spotify:(album|track|artist):.*|((?:https?:)?\/\/)?open.spotify.com\/album\/(.*)/g,
+    'File': /.*/
 };
 
 window.addEventListener('load', function () {

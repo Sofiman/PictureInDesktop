@@ -4,17 +4,13 @@ const config = require('./config');
 
 let win, popup;
 
-function createWindow(defaultConfig = true) {
+function createWindow() {
     win = new BrowserWindow({
         width: config.WIDTH, height: config.HEIGHT,
-        frame: defaultConfig,
-        alwaysOnTop: !defaultConfig,
         title: 'Picture In Desktop'
     });
 
-    if(defaultConfig){
-        setupIPC();
-    }
+    setupIPC();
 
     const appMenu = Menu.buildFromTemplate([{
         label: 'Developers',
