@@ -18,6 +18,7 @@ module.exports =  {
 
     INDEX_PAGE: 'render/index.html',
     EMBED_PAGE: 'render/embed.html',
+    ABOUT_PAGE: 'render/about.html',
 
     SERVICES: {
         'Youtube': function getStreamURL(inputURL){
@@ -41,6 +42,10 @@ module.exports =  {
 
         'TF1': function getStreamURL(){
             return 'https://www.wat.tv/embedframe/liveV4'
+        },
+
+        'Custom': function getStreamURL(inputURL){
+            return inputURL;
         }
     },
 

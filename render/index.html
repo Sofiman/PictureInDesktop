@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <title>Choose stream</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bulma.min.css">
     <script src="form.js"></script>
 
-    <style>html{overflow-y:auto}form{margin:10px}</style>
+    <style>html{overflow-y:auto}form{margin:10px}#about{position:absolute;right:5px;bottom:0}</style>
 </head>
 <body>
 
@@ -26,8 +25,10 @@
                         <option disabled selected>Choose Service</option>
                         <option value="Youtube">Youtube</option>
                         <option value="Twitch">Twitch</option>
-                        <option disabled>TV Streams</option>
+                        <option disabled>TV Channels</option>
                         <option value="TF1">TF1</option>
+                        <option disabled>Others</option>
+                        <option value="Custom">Custom</option>
                     </select>
                 </div>
             </div>
@@ -40,6 +41,9 @@
         </div>
     </form>
 
+    <div id="about">
+        <a href="about.html">About</a>
+    </div>
 
 </body>
 </html>

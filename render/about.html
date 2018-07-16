@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+
+    <link rel="stylesheet" href="bulma.min.css">
+    <style>html{overflow-y:auto}.back{display:flex;justify-content:flex-end}</style>
+</head>
+<body>
+
+<div>
+    <div class="content">
+        <table class="table is-bordered is-striped is-narrow is-fullwidth">
+            <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Author</td>
+                <td>SofianeLeCubeur</td>
+            </tr>
+            <tr>
+                <td>electron</td>
+                <td id="el-ver"></td>
+            </tr>
+            <tr>
+                <td>chrome</td>
+                <td id="ch-ver"></td>
+            </tr>
+            <tr>
+                <td>bulma</td>
+                <td>0.7.1</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="back">
+            <a href="index.html">Back &rarr;</a>
+        </div>
+    </div>
+</div>
+
+    <script>document.querySelector('#el-ver').innerHTML=process.versions.electron;document.querySelector('#ch-ver').innerHTML=process.versions.chrome</script>
+
+</body>
+</html>
