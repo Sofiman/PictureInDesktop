@@ -1,0 +1,21 @@
+{
+  "name": "pictureindesktop",
+  "version": "0.1.0",
+  "description": "Desktop version of Picture In Picture",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
+    "package-win": "electron-packager . electron-tutorial-app --overwrite --asar --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Picture In Desktop\"",
+    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar --platform=linux --arch=x64 --prune=true --out=release-builds"
+  },
+  "author": "SofianeLeCubeur",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^2.0.5",
+    "electron-packager": "^12.1.0"
+  },
+  "dependencies": {
+    "bulma": "^0.7.1"
+  }
+}
