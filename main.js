@@ -58,8 +58,6 @@ function createPopup(url){
         y: display.workAreaSize.height - 485,
         frame: false,
         alwaysOnTop: true,
-        modal: true,
-        parent: win,
         webPreferences: {plugins: true}
     });
 
@@ -89,7 +87,8 @@ function createPopup(url){
     };
     popup.loadFile(config.EMBED_PAGE);
 
-    popup.on('closed', () => popup = null)
+    popup.on('closed', () => { popup = null; win.close(); });
+    popup.setSkipTaskbar(false)
 }
 
 function setupIPC(){
