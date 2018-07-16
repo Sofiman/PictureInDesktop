@@ -8,7 +8,8 @@ function createWindow(defaultConfig = true) {
     win = new BrowserWindow({
         width: config.WIDTH, height: config.HEIGHT,
         frame: defaultConfig,
-        alwaysOnTop: !defaultConfig
+        alwaysOnTop: !defaultConfig,
+        title: 'Picture In Desktop'
     });
 
     if(defaultConfig){
@@ -102,7 +103,8 @@ function setupIPC(){
         if(service){
             let embedURL = service(result.streamURL);
             if(embedURL){
-                restartPIP(embedURL, result.service, result.size, false);
+                console.log('Input URL:', result.streamURL);
+                restartPIP(embedURL, result.service, result.size, result.force ? result.force : false);
             } else {
                 win.loadFile(config.INDEX_PAGE);
             }
@@ -110,10 +112,10 @@ function setupIPC(){
     });
 }
 
-function restartPIP(url, service, force) {
+function restartPIP(url, service, size, force) {
     win.hide();
     console.log('Embed Stream URL:', url);
-    createPopup(url, service, force)
+    createPopup(url, service, size, force)
 }
 
 app.on('ready', createWindow);

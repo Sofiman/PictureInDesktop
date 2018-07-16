@@ -26,20 +26,22 @@ module.exports =  {
             let result = regex.exec(inputURL);
 
             let queries = '';
-            if(result[6]){
+            if(result && result[6]){
                 let regex2 = /(time_continue|time|t)=([0-9dhms]+)/g;
                 let result2 = regex2.exec(inputURL);
                 queries = result[6].replace(result2[0], `start=${toSeconds(result2[2])}`);
             }
 
-            return result[5] ? `https://www.youtube.com/embed/${result[5]}${queries}` : undefined
+            return result && result[5] ? `https://www.youtube.com/embed/${result[5]}${queries}` : undefined
         },
         'Twitch': function getStreamURL(inputURL){
-            const regex = /^((?:https?:)?\/\/)?((?:www)\.)?((?:twitch\.tv))\/?([\w\-]+)(\S+)?$/g;
+            const regex = /^((?:https?:)?\/\/)?((?:www)\.)?((?:twitch\.tv))\/?([\w\-]+)(\S+)?$/;
             let result = undefined;
             if(regex.test(inputURL)){
                 let groups = regex.exec(inputURL);
-                result = `http://player.twitch.tv/?channel=${groups[4]}`;
+                if(groups && groups[4]){
+                    result = `http://player.twitch.tv/?channel=${groups[4]}`;
+                }
             }
             return result;
         },
