@@ -106,8 +106,7 @@ function setupIPC(){
                 console.log('Input URL:', result.streamURL);
                 restartPIP(embedURL, result.service, result.size, result.force ? result.force : false);
             } else {
-                win.error = `Invalid URL for the <strong>${result.service}</strong> service`;
-                win.loadFile(config.INDEX_PAGE);
+                win.webContents.send('bridge-error', `Invalid URL for the <strong>${result.service}</strong> service`);
             }
         }
     });

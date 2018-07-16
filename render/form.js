@@ -1,6 +1,6 @@
-const {ipcRenderer: ipc, remote} = require('electron');
-const currentWindow = remote.getCurrentWindow();
+const {ipcRenderer: ipc} = require('electron');
 
+let $submit;
 let patterns = {
     'TF1': /.*/,
     'Spotify': /spotify:(album|track|artist):.*|((?:https?:)?\/\/)?open.spotify.com\/album\/(.*)/g
@@ -12,10 +12,11 @@ window.addEventListener('load', function () {
     $close.addEventListener('click', function(){
         $errorNotification.classList.add('hidden');
     });
-    if(currentWindow.error){
+    ipc.on('bridge-error', function(e, error){
+        $submit.classList.remove('is-loading');
         $errorNotification.classList.remove('hidden');
-        $errorNotification.querySelector('div').innerHTML = currentWindow.error;
-    }
+        $errorNotification.querySelector('div').innerHTML = error;
+    });
 
     let $form = document.querySelector('form');
     $form.addEventListener('submit', function (e){
@@ -25,8 +26,10 @@ window.addEventListener('load', function () {
         let $width = $form[2].value;
         let $height = $form[3].value;
         let $force = $form[4].checked;
-        if($service !== 'Choose Service' && $url.length > 0 && validate($url, $service)){
-            $form[5].classList.add('is-loading');
+        $submit = $form[5];
+        if($service !== 'Choose Service' && $url.length > 0 && validate($url, $service) && $width.length > 0 && $width !== '0'
+            && $height.length > 0 && $height !== '0'){
+            $submit.classList.add('is-loading');
             setTimeout(() => ipc.send('bridge-post', {service: $service, streamURL: $url, size: {width: parseInt($width), height: parseInt($height)}, force: $force}), 250);
         } else {
             if($service === 'Choose Service'){
@@ -38,6 +41,16 @@ window.addEventListener('load', function () {
                 $form[0].classList.add('is-danger');
             } else {
                 $form[0].classList.remove('is-danger');
+            }
+            if($width.length <= 0 || $width === '0'){
+                $form[2].classList.add('is-danger');
+            } else {
+                $form[2].classList.remove('is-danger');
+            }
+            if($height.length <= 0 || $height === '0'){
+                $form[3].classList.add('is-danger');
+            } else {
+                $form[3].classList.remove('is-danger');
             }
         }
     })
