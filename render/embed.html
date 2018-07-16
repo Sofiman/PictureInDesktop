@@ -5,17 +5,16 @@
     <title>Embed Frame</title>
 
     <style>
+        html {overflow-y: hidden}
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden;
         }
         iframe {
             width: 100%;
             height: 100%;
-            border: none;
         }
         .controls {
             -webkit-app-region: drag;
@@ -31,7 +30,7 @@
             transition: opacity .3s;
         }
         body:hover .controls, *:hover .controls, .controls:hover {
-            opacity: 1;
+            opacity: 1
         }
         .button {
             -webkit-app-region: no-drag;
@@ -64,9 +63,9 @@
         </div>
     </div>
 
-    <iframe id="embed"></iframe>
+    <iframe id="embed" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 
-    <script>let rp={'Youtube':['/embed',''],'Twitch':['http://player.twitch.tv/?channel=','https://twitch.tv/']};let cw=require('electron').remote.getCurrentWindow();let esurl=cw.embedStreamURL;let psv=cw.providerService;document.querySelector('#embed').src=esurl;document.querySelector('#open').href=esurl.replace(rp[psv][0],rp[psv][1]);document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
+    <script>let rp={'Youtube':['/embed',''],'Twitch':['http://player.twitch.tv/?channel=','https://twitch.tv/']};let cw=require('electron').remote.getCurrentWindow();let esurl=cw.embedStreamURL;let psv=cw.providerService;document.querySelector('#embed').src=esurl;document.querySelector('#open').href=rp[psv]?esurl.replace(rp[psv][0],rp[psv][1]):esurl;document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
 
 </body>
 </html>

@@ -97,7 +97,11 @@ function setupIPC(){
         let service = config.SERVICES[result.service];
         if(service){
             let embedURL = service(result.streamURL);
-            restartPIP(embedURL, result.service);
+            if(embedURL){
+                restartPIP(embedURL, result.service);
+            } else {
+                win.loadFile(config.INDEX_PAGE);
+            }
         }
     });
 }

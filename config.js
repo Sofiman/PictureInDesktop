@@ -32,12 +32,16 @@ module.exports =  {
                 queries = result[6].replace(result2[0], `start=${toSeconds(result2[2])}`);
             }
 
-            return `https://www.youtube.com/embed/${result[5]}${queries}`
+            return result[5] ? `https://www.youtube.com/embed/${result[5]}${queries}` : undefined
         },
         'Twitch': function getStreamURL(inputURL){
             const regex = /^((?:https?:)?\/\/)?((?:www)\.)?((?:twitch\.tv))\/?([\w\-]+)(\S+)?$/g;
-            let result = regex.exec(inputURL);
-            return `http://player.twitch.tv/?channel=${result[4]}`;
+            let result = undefined;
+            if(regex.test(inputURL)){
+                let groups = regex.exec(inputURL);
+                result = `http://player.twitch.tv/?channel=${groups[4]}`;
+            }
+            return result;
         },
 
         'TF1': function getStreamURL(){
