@@ -55,6 +55,30 @@ module.exports =  {
 
             return result;
         },
+        'Dailymotion': function getStreamURL(inputURL){
+            const regex = /((?:https?:)?\/\/)?(www\.)?dailymotion.com\/video\/(.*)/;
+            let result = undefined;
+            if(regex.test(inputURL)){
+                let groups = regex.exec(inputURL);
+                if(groups && groups[3]){
+                    result = `https://www.dailymotion.com/embed/video/${groups[3]}?autoplay=1`;
+                }
+            }
+
+            return result;
+        },
+        'Vimeo': function getStreamURL(inputURL){
+            const regex = /((?:https?:)?\/\/)?vimeo.com\/([0-9]+)/;
+            let result = undefined;
+            if(regex.test(inputURL)){
+                let groups = regex.exec(inputURL);
+                if(groups && groups[2]){
+                    result = `https://player.vimeo.com/video/${groups[2]}`;
+                }
+            }
+
+            return result;
+        },
 
         'TF1': function getStreamURL(){
             return 'https://www.wat.tv/embedframe/liveV4'
