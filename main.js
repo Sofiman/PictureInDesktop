@@ -94,6 +94,9 @@ function createPopup(url, service, size, force){
 }
 
 function setupIPC(){
+    ipcMain.on('bridge-config', function(){
+        win.webContents.send('bridge-config-load', config.SERVICE_CATEGORIES);
+    });
     ipcMain.on('bridge-post', function (e, result) {
         let service = config.SERVICES[result.service];
         if(service){

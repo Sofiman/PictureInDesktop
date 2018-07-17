@@ -97,4 +97,10 @@ module.exports =  {
         }
     },
 
+    SERVICE_CATEGORIES: {
+        'Default': ['Youtube', 'Twitch', 'Spotify', 'Dailymotion', 'Vimeo', 'Soundcloud'],
+        'TV Channels': ['TF1'],
+        'Others': ['File', 'Custom']
+    }
+
 };
