@@ -79,6 +79,11 @@ module.exports =  {
 
             return result;
         },
+        'Soundcloud': function getStreamURL(inputURL){
+            const regex = /(https?)?:\/\/w\.soundcloud\.com\/player\/\?url=(.+)"/;
+
+            return regex.test(inputURL) ? regex.exec(inputURL)[0] : undefined;
+        },
 
         'TF1': function getStreamURL(){
             return 'https://www.wat.tv/embedframe/liveV4'

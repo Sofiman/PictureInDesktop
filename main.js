@@ -111,7 +111,7 @@ function setupIPC(){
 function restartPIP(url, service, size, force) {
     win.hide();
     console.log('Embed Stream URL:', url);
-    createPopup(url, service, size, force)
+    createPopup(url, service, size, service === 'Custom' ? true : force)
 }
 
 app.on('ready', createWindow);
