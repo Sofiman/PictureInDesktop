@@ -85,9 +85,9 @@ module.exports =  {
             return regex.test(inputURL) ? regex.exec(inputURL)[0] : undefined;
         },
 
-        'TF1': function getStreamURL(){
+        /*'TF1': function getStreamURL(){
             return 'https://www.wat.tv/embedframe/liveV4'
-        },
+        },*/
         'File': function getStreamURL(inputURL){
             return `file://${inputURL}`
         },
@@ -99,7 +99,7 @@ module.exports =  {
 
     SERVICE_CATEGORIES: {
         'Default': ['Youtube', 'Twitch', 'Spotify', 'Dailymotion', 'Vimeo', 'Soundcloud'],
-        'TV Channels': ['TF1'],
+        /*'TV Channels': ['TF1'],*/
         'Others': ['File', 'Custom']
     }
 

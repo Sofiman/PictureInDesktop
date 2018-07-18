@@ -22,7 +22,7 @@ window.addEventListener('load', function () {
     });
 
     ipc.on('bridge-config-load', function(e, config){
-        const categories = ['Default', 'TV Channels', 'Others'];
+        const categories = ['Default'/*, 'TV Channels'*/, 'Others'];
         let service, element;
         for (let i = 0; i < categories.length; i++) {
             if(categories[i] !== 'Default'){
