@@ -2,8 +2,6 @@ const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain, shell } = electron;
 const config = require('./config');
 
-window.eval = global.eval = function(){throw new Error('Unsupported for Security reasons')};
-
 let win, popup;
 
 function createWindow() {
