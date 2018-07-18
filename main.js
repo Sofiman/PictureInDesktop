@@ -2,6 +2,8 @@ const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain, shell } = electron;
 const config = require('./config');
 
+window.eval = global.eval = function(){throw new Error('Unsupported for Security reasons')};
+
 let win, popup;
 
 function createWindow() {
@@ -55,7 +57,7 @@ function createPopup(url, service, size, force){
         y: display.workAreaSize.height - (size.height ? size.height : 480) - 5,
         frame: false,
         alwaysOnTop: true,
-        webPreferences: {plugins: true}
+        webPreferences: { plugins: true }
     });
 
     const appMenu = Menu.buildFromTemplate([{
