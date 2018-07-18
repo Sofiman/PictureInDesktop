@@ -24,12 +24,16 @@
                 <td>SofianeLeCubeur</td>
             </tr>
             <tr>
-                <td>electron</td>
-                <td id="el-ver"></td>
+                <td>Electron</td>
+                <td><script>document.write(process.versions.electron)</script></td>
             </tr>
             <tr>
-                <td>chrome</td>
-                <td id="ch-ver"></td>
+                <td>Chromium</td>
+                <td><script>document.write(process.versions.chrome)</script></td>
+            </tr>
+            <tr>
+                <td>Node.js</td>
+                <td><script>document.write(process.versions.node)</script></td>
             </tr>
             <tr>
                 <td>bulma</td>
@@ -44,8 +48,6 @@
         </div>
     </div>
 </div>
-
-    <script>document.querySelector('#el-ver').innerHTML=process.versions.electron;document.querySelector('#ch-ver').innerHTML=process.versions.chrome</script>
 
 </body>
 </html>
