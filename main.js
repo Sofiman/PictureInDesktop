@@ -1,6 +1,7 @@
 const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain, shell } = electron;
 const config = require('./config');
+process.versions.pictureidesktop = config.VERSION;
 
 let win, popup;
 
