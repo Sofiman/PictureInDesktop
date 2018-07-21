@@ -9,7 +9,8 @@ let popups = [];
 function createWindow() {
     win = new BrowserWindow({
         width: config.WIDTH, height: config.HEIGHT,
-        title: 'Picture In Desktop'
+        title: 'Picture In Desktop',
+        maximizable: false
     });
 
     setupIPC();
@@ -82,16 +83,15 @@ function createPopup(url, service, size, force){
     if(!force){
         popup.embedStreamURL = url;
         popup.providerService = service;
-        popup.closeAll = function(){
+        popup.closeAll = () => {
+            popups = popups.filter(pp => pp.window !== popup);
             popup.close();
-            win.close();
         };
         popup.loadFile(config.EMBED_PAGE);
     } else {
         popup.loadURL(url);
     }
 
-    popup.on('closed', () => { popups = popups.filter(pp => pp.window !== popup); });
     popup.setSkipTaskbar(false);
 
     popups.push({window: popup, streamURL: url, service: service});
@@ -130,8 +130,8 @@ function showTray(){
                 label: 'Open',
                 click(){
                     if(!win.isVisible()){
-                        win.show();
-                        win.loadFile(config.INDEX_PAGE)
+                        win.loadFile(config.INDEX_PAGE);
+                        win.show()
                     }
                 }
             },
@@ -143,10 +143,7 @@ function showTray(){
             },
             {
                 label: 'Exit',
-                click(){
-                    popups.forEach(pp => pp.window.close());
-                    win.close()
-                }
+                click: () => closeAll()
             }
         ]);
         tray.setToolTip('PictureInDesktop');
@@ -154,12 +151,17 @@ function showTray(){
 
         tray.on('click', () => {
             if(!win.isVisible()){
-                win.show();
-                win.loadFile(config.INDEX_PAGE)
+                win.loadFile(config.INDEX_PAGE);
+                win.show()
             }
         });
         tray.setHighlightMode('always');
     }
+}
+
+function closeAll(){
+    popups.forEach(pp => pp.window.close());
+    if(!win.isDestroyed()) win.close()
 }
 
 app.on('ready', createWindow);
