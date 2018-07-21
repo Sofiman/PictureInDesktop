@@ -1,7 +1,7 @@
 const electron = require('electron');
 const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog } = electron;
 const config = require('./config');
-process.versions.pictureidesktop = config.VERSION;
+process.env.pictureidesktop = config.VERSION;
 
 let win, tray;
 let popups = [];
