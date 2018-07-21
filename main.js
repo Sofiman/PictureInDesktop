@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { app, BrowserWindow, Menu, ipcMain, shell, Tray } = electron;
+const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog } = electron;
 const config = require('./config');
 process.versions.pictureidesktop = config.VERSION;
 
@@ -46,7 +46,27 @@ function createWindow() {
 
     win.loadFile(config.INDEX_PAGE);
 
-    win.on('closed', () => win = null)
+    app.showExitPrompt = true;
+    win.on('close', e => {
+       if(popups.length > 0 && app.showExitPrompt){
+           e.preventDefault();
+           dialog.showMessageBox({
+               type: 'question',
+               buttons: ['Hide in Tray', 'Close all', 'Cancel'],
+               title: 'Confirm',
+               message: 'All popups will be closed, do you want to close or hide in tray?'
+           }, response => {
+               if(response === 0) {
+                   showTray();
+                   win.hide();
+               } else if (response === 1) {
+                   app.showExitPrompt = false;
+                   win.close()
+               }
+           })
+       }
+    });
+    win.on('closed', () => closeAll())
 }
 
 function createPopup(url, service, size, force){
