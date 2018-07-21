@@ -110,7 +110,6 @@ let config = {
 
 if(process.argv.indexOf('--dev') >= 0){
     config.SERVICE_CATEGORIES = {...config.SERVICE_CATEGORIES, 'Experimental': ['Capture']};
-    console.log(config.SERVICE_CATEGORIES);
 }
 
 module.exports = config;
