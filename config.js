@@ -12,7 +12,7 @@ function toSeconds(time){
 }
 
 module.exports =  {
-    VERSION: '0.1.0',
+    VERSION: '0.1.1',
 
     WIDTH: 800,
     HEIGHT: 340,

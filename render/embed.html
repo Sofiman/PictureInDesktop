@@ -65,7 +65,7 @@
 
     <iframe id="embed" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 
-    <script>let rp={'Youtube':['/embed',''],'Twitch':['http://player.twitch.tv/?channel=','https://twitch.tv/']};let cw=require('electron').remote.getCurrentWindow();let esurl=cw.embedStreamURL;let psv=cw.providerService;document.querySelector('#embed').src=esurl;document.querySelector('#open').href=rp[psv]?esurl.replace(rp[psv][0],rp[psv][1]):esurl;document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
+    <script>let rp={'Youtube':['/embed',''],'Twitch':['http://player.twitch.tv/?channel=','https://twitch.tv/']};let cw=require('electron').remote.getCurrentWindow();let esurl=cw.embedStreamURL;let psv=cw.providerService;document.title+=': '+psv;document.querySelector('#embed').src=esurl;document.querySelector('#open').href=rp[psv]?esurl.replace(rp[psv][0],rp[psv][1]):esurl;document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
 
 </body>
 </html>
