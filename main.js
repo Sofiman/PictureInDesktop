@@ -1,5 +1,6 @@
 const electron = require('electron');
-const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog } = electron;
+const path = require('path');
+const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog, nativeImage } = electron;
 const config = require('./config');
 process.env.pictureidesktop = config.VERSION;
 
@@ -144,7 +145,8 @@ function restartPIP(url, service, size, force) {
 
 function showTray(){
     if(tray === undefined){
-        tray = new Tray(config.TRAY_ICON);
+        let trayIcon = nativeImage.createFromPath(path.join(__dirname, config.TRAY_ICON));
+        tray = new Tray(trayIcon);
         const contextMenu = Menu.buildFromTemplate([
             {
                 label: 'Open',
@@ -180,7 +182,7 @@ function showTray(){
 }
 
 function closeAll(){
-    popups.forEach(pp => pp.window.close());
+    popups.filter(pp => !pp.window.isDestroyed()).forEach(pp => pp.window.close());
     if(!win.isDestroyed()) win.close()
 }
 
