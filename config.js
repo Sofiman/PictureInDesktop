@@ -20,6 +20,7 @@ module.exports =  {
     INDEX_PAGE: 'render/index.html',
     EMBED_PAGE: 'render/embed.html',
     ABOUT_PAGE: 'render/about.html',
+    TRAY_ICON: 'render/tray.png',
 
     SERVICES: {
         'Youtube': function getStreamURL(inputURL){
