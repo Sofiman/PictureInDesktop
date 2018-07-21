@@ -25,7 +25,7 @@ window.addEventListener('load', function () {
         const categories = ['Default'/*, 'TV Channels'*/, 'Others', 'Experimental'];
         let service, element;
         for (let i = 0; i < categories.length; i++) {
-            if(categories[i]){
+            if(categories[i] && config[categories[i]]){
                 if(categories[i] !== 'Default'){
                     element = document.createElement('option');
                     element.setAttribute('disabled', null);
