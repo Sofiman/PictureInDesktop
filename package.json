@@ -4,7 +4,7 @@
   "description": "Desktop version of Picture In Picture",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron . --dev",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=release-builds/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . PictureInDesktop --overwrite --asar --platform=win32 --icon=release-builds/icon.ico --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Picture In Desktop\"",
     "package-linux": "electron-packager . PictureInDesktop --overwrite --asar --platform=linux --icon=release-builds/icon.png --arch=x64 --prune=true --out=release-builds"

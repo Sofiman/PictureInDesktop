@@ -11,7 +11,7 @@ function toSeconds(time){
     return seconds;
 }
 
-module.exports =  {
+let config = {
     VERSION: '0.1.1',
 
     WIDTH: 800,
@@ -107,3 +107,10 @@ module.exports =  {
     }
 
 };
+
+if(process.argv.indexOf('--dev') >= 0){
+    config.SERVICE_CATEGORIES = {...config.SERVICE_CATEGORIES, 'Experimental': ['Capture']};
+    console.log(config.SERVICE_CATEGORIES);
+}
+
+module.exports = config;

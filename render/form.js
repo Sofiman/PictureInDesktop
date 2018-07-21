@@ -2,7 +2,7 @@ const {ipcRenderer: ipc} = require('electron');
 
 let $submit, $services;
 let patterns = {
-    'TF1': /.*/,
+    //'TF1': /.*/,
     'Spotify': /spotify:(album|track|artist):.*|((?:https?:)?\/\/)?open.spotify.com\/album\/(.*)/g,
     'File': /.*/
 };
@@ -22,20 +22,22 @@ window.addEventListener('load', function () {
     });
 
     ipc.on('bridge-config-load', function(e, config){
-        const categories = ['Default'/*, 'TV Channels'*/, 'Others'];
+        const categories = ['Default'/*, 'TV Channels'*/, 'Others', 'Experimental'];
         let service, element;
         for (let i = 0; i < categories.length; i++) {
-            if(categories[i] !== 'Default'){
-                element = document.createElement('option');
-                element.setAttribute('disabled', null);
-                element.innerHTML = categories[i];
-                $services.appendChild(element);
-            }
-            for(service of config[categories[i]]){
-                element = document.createElement('option');
-                element.setAttribute('value', service);
-                element.innerHTML = service;
-                $services.appendChild(element);
+            if(categories[i]){
+                if(categories[i] !== 'Default'){
+                    element = document.createElement('option');
+                    element.setAttribute('disabled', null);
+                    element.innerHTML = categories[i];
+                    $services.appendChild(element);
+                }
+                for(service of config[categories[i]]){
+                    element = document.createElement('option');
+                    element.setAttribute('value', service);
+                    element.innerHTML = service;
+                    $services.appendChild(element);
+                }
             }
         }
         $services.parentNode.classList.remove('is-loading');
