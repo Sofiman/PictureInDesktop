@@ -25,11 +25,6 @@ function createWindow() {
                 click() { win.webContents.openDevTools() }
             },
             {
-                label: 'About Page',
-                accelerator: 'CmdOrCtrl+B',
-                click() { win.loadFile(config.ABOUT_PAGE) }
-            },
-            {
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
                 click() { win.loadFile(config.INDEX_PAGE) }
