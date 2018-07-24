@@ -79,7 +79,8 @@ function createPopup(url, service, size, force){
         y: display.workAreaSize.height - (size.height ? size.height : 480) - 5,
         frame: false,
         alwaysOnTop: true,
-        webPreferences: { plugins: true }
+        webPreferences: { plugins: true },
+        title: 'Embed Frame'
     });
 
     const appMenu = Menu.buildFromTemplate([{
@@ -125,10 +126,10 @@ function setupIPC(){
     ipcMain.on('bridge-post', function (e, result) {
         let service = config.SERVICES[result.service];
         if(service){
-            let embedURL = service(result.streamURL);
+            let embedURL = service.getStreamURL(result.streamURL);
             if(embedURL){
                 console.log('Input URL:', result.streamURL);
-                restartPIP(embedURL, result.service, result.size, result.force ? result.force : false);
+                restartPIP(embedURL, result.service, result.size, result.force === true || service.force);
             } else {
                 win.webContents.send('bridge-error', `Invalid URL for the <strong>${result.service}</strong> service`);
             }
@@ -140,7 +141,7 @@ function restartPIP(url, service, size, force) {
     win.hide();
     showTray();
     console.log('Embed Stream URL:', url);
-    createPopup(url, service, size, service === 'Custom' ? true : force)
+    createPopup(url, service, size, force)
 }
 
 function showTray(){
