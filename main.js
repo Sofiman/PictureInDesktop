@@ -100,10 +100,7 @@ function createPopup(url, service, size, force){
     if(!force){
         popup.embedStreamURL = url;
         popup.providerService = service;
-        popup.closeAll = () => {
-            popups = popups.filter(pp => pp.window !== popup);
-            popup.close();
-        };
+        popup.closeAll = () => popup.close();
         popup.loadFile(config.EMBED_PAGE);
     } else {
         popup.loadURL(url);
@@ -112,6 +109,7 @@ function createPopup(url, service, size, force){
     popup.setSkipTaskbar(false);
 
     popups.push({window: popup, streamURL: url, service: service});
+    popup.on('closed', () => popups = popups.filter(pp => pp.window !== popup));
 }
 
 function setupIPC(){
