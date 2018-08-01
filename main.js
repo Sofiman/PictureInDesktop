@@ -68,12 +68,12 @@ function createWindow() {
 
 function createPopup(url, service, size, force, offsetY, darkMode){
     let display = electron.screen.getPrimaryDisplay();
-    let maxY = display.workAreaSize.height - 5;
+    let maxY = display.workAreaSize.height;
 
     let popup = new BrowserWindow({
         width: size.width ? size.width : 720, height: size.height ? size.height : 480,
         x: display.workAreaSize.width - (size.width ? size.width : 720) - 5,
-        y: display.workAreaSize.height - (size.height ? size.height : 480) - 5,
+        y: maxY - (size.height ? size.height : 480) - 5,
         frame: false,
         alwaysOnTop: true,
         webPreferences: { plugins: true },
@@ -117,7 +117,7 @@ function createPopup(url, service, size, force, offsetY, darkMode){
         let bounds = popup.getBounds();
         if(bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
         if(bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
-        if(bounds.y >= maxY - config.MAGNET_REACH + bounds.height) bounds.y = maxY - config.MAGNET_BOX;
+        if(bounds.y + bounds.height >= maxY - config.MAGNET_REACH) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
         popup.setBounds(bounds);
     });
     popup.on('closed', () => popups = popups.filter(pp => pp.window !== popup));
