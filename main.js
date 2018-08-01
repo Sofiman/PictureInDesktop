@@ -68,6 +68,7 @@ function createWindow() {
 
 function createPopup(url, service, size, force, offsetY, darkMode){
     let display = electron.screen.getPrimaryDisplay();
+    let maxY = display.workAreaSize.height - 5;
 
     let popup = new BrowserWindow({
         width: size.width ? size.width : 720, height: size.height ? size.height : 480,
@@ -112,6 +113,13 @@ function createPopup(url, service, size, force, offsetY, darkMode){
     popup.setSkipTaskbar(false);
 
     popups.push({window: popup, streamURL: url, service: service});
+    popup.on('move', () => {
+        let bounds = popup.getBounds();
+        if(bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
+        if(bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
+        if(bounds.y >= maxY - config.MAGNET_REACH + bounds.height) bounds.y = maxY - config.MAGNET_BOX;
+        popup.setBounds(bounds);
+    });
     popup.on('closed', () => popups = popups.filter(pp => pp.window !== popup));
 }
 

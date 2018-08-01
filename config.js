@@ -17,6 +17,9 @@ let config = {
     WIDTH: 800,
     HEIGHT: 340,
 
+    MAGNET_REACH: 20,
+    MAGNET_BOX: 5,
+
     INDEX_PAGE: 'render/index.html',
     EMBED_PAGE: 'render/embed.html',
     ABOUT_PAGE: 'render/about.html',
