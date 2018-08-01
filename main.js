@@ -11,7 +11,8 @@ function createWindow() {
     win = new BrowserWindow({
         width: config.WIDTH, height: config.HEIGHT,
         title: 'Picture In Desktop',
-        maximizable: false
+        maximizable: false,
+        resizable: false
     });
 
     setupIPC();
@@ -65,7 +66,7 @@ function createWindow() {
     win.on('closed', () => closeAll())
 }
 
-function createPopup(url, service, size, force){
+function createPopup(url, service, size, force, offsetY, darkMode){
     let display = electron.screen.getPrimaryDisplay();
 
     let popup = new BrowserWindow({
@@ -100,6 +101,8 @@ function createPopup(url, service, size, force){
     if(!force){
         popup.embedStreamURL = url;
         popup.providerService = service;
+        popup.offsetY = offsetY;
+        if(darkMode) popup.darkMode = darkMode;
         popup.closeAll = () => popup.close();
         popup.loadFile(config.EMBED_PAGE);
     } else {
@@ -122,7 +125,7 @@ function setupIPC(){
             let embedURL = service.getStreamURL(result.streamURL);
             if(embedURL){
                 console.log('Input URL:', result.streamURL);
-                restartPIP(embedURL, result.service, result.size, result.force === true || service.force);
+                restartPIP(embedURL, result.service, result.size, result.force === true || service.force, service.controlsYOffset ? service.controlsYOffset : 10, service.darkMode);
             } else {
                 win.webContents.send('bridge-error', `Invalid URL for the <strong>${result.service}</strong> service`);
             }
@@ -130,11 +133,11 @@ function setupIPC(){
     });
 }
 
-function restartPIP(url, service, size, force) {
+function restartPIP(url, service, size, force, offY, darkMode) {
     win.hide();
     showTray();
     console.log('Embed Stream URL:', url);
-    createPopup(url, service, size, force)
+    createPopup(url, service, size, force, offY, darkMode)
 }
 
 function showTray(){

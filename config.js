@@ -12,7 +12,7 @@ function toSeconds(time){
 }
 
 let config = {
-    VERSION: '0.1.1',
+    VERSION: '0.1.2-pre',
 
     WIDTH: 800,
     HEIGHT: 340,
@@ -36,7 +36,8 @@ let config = {
                 }
 
                 return result && result[5] ? `https://www.youtube.com/embed/${result[5]}${queries}` : undefined
-            }
+            },
+            controlsYOffset: 30
         },
         'Twitch': {
             getStreamURL: function getStreamURL(inputURL) {
@@ -97,7 +98,8 @@ let config = {
             getStreamURL: function getStreamURL(inputURL) {
                 const regex = /(https?)?:\/\/w\.soundcloud\.com\/player\/\?url=(.+)"/;
                 return regex.test(inputURL) ? regex.exec(inputURL)[0] : undefined;
-            }
+            },
+            darkMode: true
         },
 
         /*'TF1': function getStreamURL(){
@@ -122,7 +124,8 @@ let config = {
                 let result = regex.exec(inputURL);
                 return result && result[5] ? `https://youtube.com/live_chat?is_popout=1&v=${result[5]}` : undefined;
             },
-            force: true
+            force: true,
+            darkMode: true
         }
     },
 

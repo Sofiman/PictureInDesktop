@@ -22,7 +22,6 @@
             position: absolute;
             width: calc(100% - 20px);
             height: 20px;
-            top: 10px;
             left: 5px;
             justify-content: space-between;
             align-items: center;
@@ -39,6 +38,9 @@
         button {
             border: none;
             background: none;
+        }
+        .dark svg path {
+            fill: #212121;
         }
     </style>
 </head>
@@ -65,7 +67,7 @@
 
     <iframe id="embed" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 
-    <script>let rp={'Youtube':['/embed',''],'Twitch':['http://player.twitch.tv/?channel=','https://twitch.tv/']};let cw=require('electron').remote.getCurrentWindow();let esurl=cw.embedStreamURL;let psv=cw.providerService;document.title+=': '+psv;document.querySelector('#embed').src=esurl;document.querySelector('#open').href=rp[psv]?esurl.replace(rp[psv][0],rp[psv][1]):esurl;document.querySelector('#close').addEventListener('click',function(){cw.closeAll();})</script>
+    <script src="embed.js"></script>
 
 </body>
 </html>
