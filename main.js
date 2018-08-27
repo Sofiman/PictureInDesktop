@@ -134,6 +134,7 @@ function createPopup(url, service, size, force, offsetY, darkMode){
 }
 
 function setupIPC(){
+    config.readModules(config.MODULES_DIR);
     ipcMain.on('bridge-config', function(){
         win.webContents.send('bridge-config-load', config.SERVICE_CATEGORIES);
     });
