@@ -28,7 +28,9 @@ let config = {
         },
 
         'Custom': {
-            getStreamURL: function getStreamURL(inputURL) { return inputURL },
+            getStreamURL: function getStreamURL(inputURL) {
+                return inputURL
+            },
             force: true
         },
     },
@@ -41,27 +43,28 @@ let config = {
 };
 
 module.exports = config;
-module.exports.readModules = function readModules(modulesDir){
-  fs.readdir(modulesDir, (err, dir) => {
-    for(let filePath of dir) {
-      let service = require(`./${modulesDir}/${filePath}`), serviceName = path.basename(filePath, '.js');
-      if(!service.category){
-        console.error('Warning: Skipped the Service', filePath, 'because of no category defined');
-        continue;
-      }
-      config.SERVICES[serviceName] = service;
-      if(service.category.toLowerCase() === 'experimental'){
-          if(process.argv.indexOf('--dev') >= 0){
-            if(!config.SERVICE_CATEGORIES['Experimental']){
-              config.SERVICE_CATEGORIES['Experimental'] = [];
+module.exports.readModules = function readModules(modulesDir) {
+    let dir = path.join(__dirname, modulesDir);
+    fs.readdir(dir, (err, dir) => {
+        for (let filePath of dir) {
+            let service = require(`./${modulesDir}/${filePath}`), serviceName = path.basename(filePath, '.js');
+            if (!service.category) {
+                console.error('Warning: Skipped the Service', filePath, 'because of no category defined');
+                continue;
             }
-            config.SERVICE_CATEGORIES['Experimental'].push(serviceName);
-          }
-      } else if(config.SERVICE_CATEGORIES[service.category]){
-        config.SERVICE_CATEGORIES[service.category].push(serviceName);
-      } else {
-        config.SERVICE_CATEGORIES[service.category] = [serviceName];
-      }
-    }
-  });
+            config.SERVICES[serviceName] = service;
+            if (service.category.toLowerCase() === 'experimental') {
+                if (process.argv.indexOf('--dev') >= 0) {
+                    if (!config.SERVICE_CATEGORIES['Experimental']) {
+                        config.SERVICE_CATEGORIES['Experimental'] = [];
+                    }
+                    config.SERVICE_CATEGORIES['Experimental'].push(serviceName);
+                }
+            } else if (config.SERVICE_CATEGORIES[service.category]) {
+                config.SERVICE_CATEGORIES[service.category].push(serviceName);
+            } else {
+                config.SERVICE_CATEGORIES[service.category] = [serviceName];
+            }
+        }
+    });
 };
