@@ -4,50 +4,12 @@
     <meta charset="UTF-8">
     <title>Embed Frame</title>
 
-    <style>
-        html {overflow-y: hidden}
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-        }
-        .controls {
-            -webkit-app-region: drag;
-            display: flex;
-            position: absolute;
-            width: calc(100% - 20px);
-            height: 20px;
-            left: 5px;
-            justify-content: space-between;
-            align-items: center;
-            opacity: 0;
-            transition: opacity .3s;
-        }
-        body:hover .controls, *:hover .controls, .controls:hover {
-            opacity: 1
-        }
-        .button {
-            -webkit-app-region: no-drag;
-            cursor: pointer;
-        }
-        button {
-            border: none;
-            background: none;
-        }
-        .dark svg path {
-            fill: #212121;
-        }
-    </style>
+    <link rel="stylesheet" href="embed.css">
 </head>
 <body>
     <div class="controls">
         <div>
-            <svg style="width:24px;height:24px;" viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24">
                 <path fill="#FFF" d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"></path>
             </svg>
             <a target="_blank" id="open" class="button">
@@ -58,7 +20,7 @@
         </div>
         <div>
             <button id="close" class="button">
-                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24">
                     <path fill="#FFF" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" ></path>
                 </svg>
             </button>
