@@ -4,8 +4,7 @@ const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog, nativeImage } = 
 const config = require('./config');
 process.env.pictureidesktop = config.VERSION;
 
-let win, tray;
-let popups = [];
+let win, tray, popups = [];
 
 function createWindow() {
     win = new BrowserWindow({
@@ -20,11 +19,6 @@ function createWindow() {
     const appMenu = Menu.buildFromTemplate([{
         label: 'Developers',
         submenu: [
-            {
-                label: 'Toggle DevTools',
-                accelerator: 'CmdOrCtrl+Shift+I',
-                click() { win.webContents.openDevTools() }
-            },
             {
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
@@ -77,12 +71,28 @@ function createPopup(url, service, size, force, offsetY, darkMode){
         frame: false,
         alwaysOnTop: true,
         webPreferences: { plugins: true },
-        title: 'Embed Frame'
+        title: `Embed Frame: ${service}`
     });
 
     const appMenu = Menu.buildFromTemplate([{
         label: 'Developers',
         submenu: [
+            {
+                label: 'Reload',
+                accelerator: 'CmdOrCtrl+R',
+                click() {
+                  if(!force){
+                      popup.embedStreamURL = url;
+                      popup.providerService = service;
+                      popup.offsetY = offsetY;
+                      if(darkMode) popup.darkMode = darkMode;
+                      popup.closeAll = () => popup.close();
+                      popup.loadFile(config.EMBED_PAGE);
+                  } else {
+                      popup.loadURL(url);
+                  }
+                }
+            },
             {
                 label: 'Toggle Dev Tools',
                 accelerator: 'CmdOrCtrl+Shift+I',
@@ -117,7 +127,7 @@ function createPopup(url, service, size, force, offsetY, darkMode){
         let bounds = popup.getBounds();
         if(bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
         if(bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
-        if(bounds.y + bounds.height >= maxY - config.MAGNET_REACH) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
+        //if(bounds.y + bounds.height >= maxY - config.MAGNET_REACH) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
         popup.setBounds(bounds);
     });
     popup.on('closed', () => popups = popups.filter(pp => pp.window !== popup));
@@ -144,7 +154,7 @@ function setupIPC(){
 function restartPIP(url, service, size, force, offY, darkMode) {
     win.hide();
     showTray();
-    console.log('Embed Stream URL:', url);
+    console.log('Embed Stream URI:', url);
     createPopup(url, service, size, force, offY, darkMode)
 }
 
@@ -188,6 +198,7 @@ function showTray(){
 
 function closeAll(){
     popups.filter(pp => !pp.window.isDestroyed()).forEach(pp => pp.window.close());
+    popups = [];
     if(!win.isDestroyed()) win.close()
 }
 
