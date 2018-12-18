@@ -14,17 +14,10 @@ function toSeconds(time) {
 module.exports = {
     category: 'Default',
     getStreamURL: function getStreamURL(inputURL) {
-        const regex = /^((?:https?:)?\/\/)?((?:www|m|gaming)\.)?((?:youtube\.com|youtu\.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/g;
+        const regex = /^((?:https?:)?\/\/)?((?:www|m|gaming|music)\.)?((?:youtube\.com|youtu\.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/g;
         let result = regex.exec(inputURL);
 
-        let queries = '';
-        if (result && result[6]) {
-            let regex2 = /(time_continue|time|t)=([0-9dhms]+)/g;
-            let result2 = regex2.exec(inputURL);
-            queries = result[6].replace(result2[0], `start=${toSeconds(result2[2])}`);
-        }
-
-        return result && result[5] ? `https://www.youtube.com/embed/${result[5]}${queries}` : undefined
+        return result && result[5] ? `https://www.youtube.com/embed/${result[5]}${result[6] || ''}` : undefined
     },
     controlsYOffset: 30
 };

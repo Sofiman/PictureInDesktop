@@ -17,9 +17,6 @@ let config = {
     MODULES_DIR: 'services',
 
     SERVICES: {
-        /*'TF1': function getStreamURL(){
-            return 'https://www.wat.tv/embedframe/liveV4'
-        },*/
         'File': {
             getStreamURL: function getStreamURL(inputURL) {
                 return `file://${inputURL}`

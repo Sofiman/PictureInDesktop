@@ -11,7 +11,7 @@ function createWindow() {
         width: config.WIDTH, height: config.HEIGHT,
         title: 'Picture In Desktop',
         maximizable: false,
-        resizable: false
+        resizable: false,
     });
 
     setupIPC();
@@ -22,7 +22,16 @@ function createWindow() {
             {
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
-                click() { win.loadFile(config.INDEX_PAGE) }
+                click() {
+                    win.loadFile(config.INDEX_PAGE)
+                }
+            },
+            {
+                label: 'Toggle Dev Tools',
+                accelerator: 'CmdOrCtrl+Shift+I',
+                click() {
+                    if (process.argv.indexOf('--dev') >= 0) win.webContents.openDevTools()
+                }
             }
         ]
     }]);
@@ -39,28 +48,28 @@ function createWindow() {
 
     app.showExitPrompt = true;
     win.on('close', e => {
-       if(popups.length > 0 && app.showExitPrompt){
-           e.preventDefault();
-           dialog.showMessageBox({
-               type: 'question',
-               buttons: ['Hide in Tray', 'Close all', 'Cancel'],
-               title: 'Confirm',
-               message: 'All popups will be closed, do you want to close or hide in tray?'
-           }, response => {
-               if(response === 0) {
-                   showTray();
-                   win.hide();
-               } else if (response === 1) {
-                   app.showExitPrompt = false;
-                   win.close()
-               }
-           })
-       }
+        if (popups.length > 0 && app.showExitPrompt) {
+            e.preventDefault();
+            dialog.showMessageBox({
+                type: 'question',
+                buttons: ['Hide in Tray', 'Close all', 'Cancel'],
+                title: 'Confirm',
+                message: 'All popups will be closed, do you want to close or hide in tray?'
+            }, response => {
+                if (response === 0) {
+                    showTray();
+                    win.hide();
+                } else if (response === 1) {
+                    app.showExitPrompt = false;
+                    win.close()
+                }
+            })
+        }
     });
     win.on('closed', () => closeAll())
 }
 
-function createPopup(url, service, size, force, offsetY, darkMode){
+function createPopup(url, service, size, force, offsetY, darkMode, opacity) {
     let display = electron.screen.getPrimaryDisplay();
     let maxY = display.workAreaSize.height;
 
@@ -74,6 +83,8 @@ function createPopup(url, service, size, force, offsetY, darkMode){
         title: `Embed Frame: ${service}`
     });
 
+    popup.setOpacity(opacity);
+
     const appMenu = Menu.buildFromTemplate([{
         label: 'Developers',
         submenu: [
@@ -81,22 +92,20 @@ function createPopup(url, service, size, force, offsetY, darkMode){
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
                 click() {
-                  if(!force){
-                      popup.embedStreamURL = url;
-                      popup.providerService = service;
-                      popup.offsetY = offsetY;
-                      if(darkMode) popup.darkMode = darkMode;
-                      popup.closeAll = () => popup.close();
-                      popup.loadFile(config.EMBED_PAGE);
-                  } else {
-                      popup.loadURL(url);
-                  }
+                    popup.embedStreamURL = url;
+                    popup.providerService = service;
+                    popup.offsetY = offsetY;
+                    if (darkMode) popup.darkMode = darkMode;
+                    popup.closeAll = () => popup.close();
+                    popup.loadFile(config.EMBED_PAGE);
                 }
             },
             {
                 label: 'Toggle Dev Tools',
                 accelerator: 'CmdOrCtrl+Shift+I',
-                click() { popup.webContents.openDevTools() }
+                click() {
+                    popup.webContents.openDevTools()
+                }
             }
         ]
     }]);
@@ -109,24 +118,20 @@ function createPopup(url, service, size, force, offsetY, darkMode){
     Menu.setApplicationMenu(appMenu);
     popup.setMenuBarVisibility(false);
 
-    if(!force){
-        popup.embedStreamURL = url;
-        popup.providerService = service;
-        popup.offsetY = offsetY;
-        if(darkMode) popup.darkMode = darkMode;
-        popup.closeAll = () => popup.close();
-        popup.loadFile(config.EMBED_PAGE);
-    } else {
-        popup.loadURL(url);
-    }
+    popup.embedStreamURL = url;
+    popup.providerService = service;
+    popup.offsetY = offsetY;
+    if (darkMode) popup.darkMode = darkMode;
+    popup.closeAll = () => popup.close();
+    popup.loadFile(config.EMBED_PAGE);
 
     popup.setSkipTaskbar(false);
 
-    popups.push({window: popup, streamURL: url, service: service});
+    popups.push({ window: popup, streamURL: url, service: service });
     popup.on('move', () => {
         let bounds = popup.getBounds();
-        if(bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
-        if(bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
+        if (bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
+        if (bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
         //if(bounds.y + bounds.height >= maxY - config.MAGNET_REACH) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
         popup.setBounds(bounds);
     });
@@ -135,16 +140,17 @@ function createPopup(url, service, size, force, offsetY, darkMode){
 
 function setupIPC(){
     config.readModules(config.MODULES_DIR);
-    ipcMain.on('bridge-config', function(){
+    ipcMain.on('bridge-config', function () {
         win.webContents.send('bridge-config-load', config.SERVICE_CATEGORIES);
     });
     ipcMain.on('bridge-post', function (e, result) {
         let service = config.SERVICES[result.service];
-        if(service){
+        if (service) {
             let embedURL = service.getStreamURL(result.streamURL);
-            if(embedURL){
+            if (embedURL) {
                 console.log('Input URL:', result.streamURL);
-                restartPIP(embedURL, result.service, result.size, result.force === true || service.force, service.controlsYOffset ? service.controlsYOffset : 10, service.darkMode);
+                restartPIP(embedURL, result.service, result.size, result.force === true || service.force, service.controlsYOffset ? service.controlsYOffset : 10, service.darkMode,
+                    result.opacity);
             } else {
                 win.webContents.send('bridge-error', `Invalid URL for the <strong>${result.service}</strong> service`);
             }
@@ -152,22 +158,22 @@ function setupIPC(){
     });
 }
 
-function restartPIP(url, service, size, force, offY, darkMode) {
+function restartPIP(url, service, size, force, offY, darkMode, opacity) {
     win.hide();
     showTray();
     console.log('Embed Stream URI:', url);
-    createPopup(url, service, size, force, offY, darkMode)
+    createPopup(url, service, size, force, offY, darkMode, opacity)
 }
 
-function showTray(){
-    if(tray === undefined){
+function showTray() {
+    if (tray === undefined) {
         let trayIcon = nativeImage.createFromPath(path.join(__dirname, config.TRAY_ICON));
         tray = new Tray(trayIcon);
         const contextMenu = Menu.buildFromTemplate([
             {
                 label: 'Open',
-                click(){
-                    if(!win.isVisible()){
+                click() {
+                    if (!win.isVisible()) {
                         win.loadFile(config.INDEX_PAGE);
                         win.show()
                     }
@@ -175,7 +181,7 @@ function showTray(){
             },
             {
                 label: 'Close All Windows',
-                click(){
+                click() {
                     popups.forEach(pp => pp.window.close())
                 },
             },
@@ -188,7 +194,7 @@ function showTray(){
         tray.setContextMenu(contextMenu);
 
         tray.on('click', () => {
-            if(!win.isVisible()){
+            if (!win.isVisible()) {
                 win.loadFile(config.INDEX_PAGE);
                 win.show()
             }
@@ -197,15 +203,15 @@ function showTray(){
     }
 }
 
-function closeAll(){
+function closeAll() {
     popups.filter(pp => !pp.window.isDestroyed()).forEach(pp => pp.window.close());
     popups = [];
-    if(!win.isDestroyed()) win.close()
+    if (!win.isDestroyed()) win.close()
 }
 
 app.on('ready', createWindow);
 app.on('window-all-closed', () => {
-    if(tray) tray.destroy();
+    if (tray) tray.destroy();
     if (process.platform !== 'darwin')
         app.quit()
 });

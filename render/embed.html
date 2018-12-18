@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Embed Frame</title>
 
-    <link rel="stylesheet" href="embed.css">
+    <link rel="stylesheet" href="assets/embed.css">
 </head>
 <body>
     <div class="controls">
@@ -13,8 +13,8 @@
                 <path fill="#FFF" d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"></path>
             </svg>
             <a target="_blank" id="open" class="button">
-                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                    <path fill="#FFF" d="M4,8H8V4H20V16H16V20H4V8M16,8V14H18V6H10V8H16M6,12V18H14V12H6Z" ></path>
+                <svg style="width:24px;height:24px">
+                    <path fill="#FFF" d="M17 7H5v8h12V7zm6 12V5a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h18a2 2 0 0 0 2-2zm-2 0H3V5h18v14z"></path>
                 </svg>
             </a>
         </div>
@@ -36,9 +36,9 @@
       </div>
     </div>
 
-    <iframe id="embed" frameborder="0" allowtransparency="true" allow="encrypted-media" allowfullscreen></iframe>
+    <webview id="embed" allowtransparency="true" allow="encrypted-media" allowfullscreen plugins></webview>
 
-    <script src="embed.js"></script>
+    <script src="assets/embed.js"></script>
 
 </body>
 </html>

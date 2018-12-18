@@ -22,7 +22,7 @@ window.addEventListener('load', function () {
     });
 
     ipc.on('bridge-config-load', function(e, config){
-        const categories = ['Default'/*, 'TV Channels'*/, 'Others', 'Experimental'];
+        const categories = Object.keys(config);
         let service, element;
         for (let i = 0; i < categories.length; i++) {
             if(categories[i] && config[categories[i]]){
@@ -47,23 +47,24 @@ window.addEventListener('load', function () {
     let $form = document.querySelector('form');
     $form.addEventListener('submit', function (e){
         e.preventDefault();
-        let $url = $form[0].value;
-        let $service = $form[1].value;
+        let streamURL = $form[0].value;
+        let service = $form[1].value;
         let $width = $form[2].value;
         let $height = $form[3].value;
-        let $force = $form[4].checked;
+        let opacity = $form[4].value / 100.0;
+        let force = $form[5].checked;
         $submit = $form[5];
-        if($service !== 'Choose Service' && $url.length > 0 && validate($url, $service) && $width.length > 0 && $width !== '0'
+        if(service !== 'Choose Service' && validate(streamURL, service) && $width.length > 0 && $width !== '0'
             && $height.length > 0 && $height !== '0'){
             $submit.classList.add('is-loading');
-            setTimeout(() => ipc.send('bridge-post', {service: $service, streamURL: $url, size: {width: parseInt($width), height: parseInt($height)}, force: $force}), 250);
+            setTimeout(() => ipc.send('bridge-post', {service, streamURL, size: {width: parseInt($width), height: parseInt($height)}, force, opacity}), 250);
         } else {
-            if($service === 'Choose Service'){
+            if(service === 'Choose Service'){
                 $form[1].parentNode.classList.add('is-danger');
             } else {
                 $form[1].parentNode.classList.remove('is-danger');
             }
-            if($url.length <= 0 || !validate($url, $service)){
+            if(streamURL.length <= 0 || !validate(streamURL, service)){
                 $form[0].classList.add('is-danger');
             } else {
                 $form[0].classList.remove('is-danger');

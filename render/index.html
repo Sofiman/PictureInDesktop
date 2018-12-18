@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css">
     <link rel="stylesheet" href="../node_modules/bulma-checkradio/dist/css/bulma-checkradio.min.css">
-    <script src="form.js"></script>
+    <script src="assets/form.js"></script>
 
     <style>html{overflow-y:auto}body{margin:10px}#about{position:absolute;right:5px;bottom:0}.hidden{display:none}</style>
 </head>
@@ -42,6 +42,10 @@
             <div class="column field">
                 <label class="label">Height</label>
                 <input type="number" class="input" value="480" min="0" id="height">
+            </div>
+            <div class="column field">
+                <label class="label">Opacity (%)</label>
+                <input type="number" class="input" value="100" min="1" max="100" id="opacity">
             </div>
         </div>
 
