@@ -4,7 +4,21 @@ const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog, nativeImage } = 
 const config = require('./config');
 process.env.pictureidesktop = config.VERSION;
 
-let win, tray, popups = [];
+let win, tray, popups = [], pluginName;
+
+switch (process.platform) {
+    case 'win32':
+        pluginName = 'pepflashplayer.dll';
+        break;
+    case 'darwin':
+        pluginName = 'PepperFlashPlayer.plugin';
+        break;
+    case 'linux':
+        pluginName = 'libpepflashplayer.so';
+        break;
+}
+app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName));
+app.commandLine.appendSwitch('ppapi-flash-version', '31.0.0.108');
 
 function createWindow() {
     win = new BrowserWindow({

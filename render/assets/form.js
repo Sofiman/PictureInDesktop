@@ -4,7 +4,8 @@ let $submit, $services;
 let patterns = {
     //'TF1': /.*/,
     'Spotify': /spotify:(album|track|artist):.*|((?:https?:)?\/\/)?open.spotify.com\/album\/(.*)/g,
-    'File': /.*/
+    'File': /.*/,
+    'Timer': /(.*?)/
 };
 
 window.addEventListener('load', function () {

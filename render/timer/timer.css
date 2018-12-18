@@ -1,0 +1,27 @@
+* {
+    font-family: 'Comfortaa', cursive;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.time {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+}
+
+.time .separator {
+    font-size: 3rem;
+    color: #7d7d7d;
+    line-height: 2.6rem;
+}
+
+.time h1 {
+    font-size: 3rem;
+    font-weight: normal;
+    margin: 0 10px;
+    height: auto;
+    color: #4a4a4a;
+}
