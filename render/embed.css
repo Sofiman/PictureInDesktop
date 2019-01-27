@@ -39,11 +39,17 @@ body:hover .controls, *:hover .controls,
 .button {
     -webkit-app-region: no-drag;
     cursor: pointer;
+    height: 24px;
+    border-radius: 50%;
 }
 
 button {
     border: none;
     background: none;
+}
+
+.button:hover {
+    background: rgba(255,255,255,.3);
 }
 
 .dark svg path {
