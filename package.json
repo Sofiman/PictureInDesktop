@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron . --dev",
+    "pipd": "electron . --dev --pip \"pipd://open?service=Youtube&url=https://www.youtube.com/watch?v=vy2s_Dc0nd8\"",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=release-builds/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . PictureInDesktop --overwrite --asar --platform=win32 --icon=release-builds/icon.ico --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Picture In Desktop\"",
     "package-linux": "electron-packager . PictureInDesktop --overwrite --asar --platform=linux --icon=release-builds/icon.png --arch=x64 --prune=true --out=release-builds"
@@ -13,13 +14,13 @@
   "license": "ISC",
   "repository": "PictureInDesktop",
   "devDependencies": {
-    "electron": "^2.0.8",
     "electron-packager": "^12.1.0"
   },
   "dependencies": {
     "bulma": "^0.7.1",
     "bulma-checkradio": "^2.1.0",
-    "chromecasts": "^1.9.1",
-    "express": "^4.16.3"
+    "electron": "^4.0.1",
+    "express": "^4.16.3",
+    "node-fetch": "^2.3.0"
   }
 }
