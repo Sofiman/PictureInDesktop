@@ -40,7 +40,7 @@ let config = {
 };
 
 module.exports = config;
-module.exports.readModules = function readModules(modulesDir) {
+module.exports.readModules = function readModules(modulesDir, callback) {
     let dir = path.join(__dirname, modulesDir);
     fs.readdir(dir, (err, dir) => {
         for (let filePath of dir) {
@@ -63,5 +63,6 @@ module.exports.readModules = function readModules(modulesDir) {
                 config.SERVICE_CATEGORIES[service.category] = [serviceName];
             }
         }
+        callback();
     });
 };

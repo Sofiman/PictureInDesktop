@@ -1,10 +1,11 @@
 const electron = require('electron');
 const path = require('path');
+const url = require('url');
 const { app, BrowserWindow, Menu, ipcMain, shell, Tray, dialog, nativeImage } = electron;
 const config = require('./config');
 process.env.pictureidesktop = config.VERSION;
 
-let win, tray, popups = [], pluginName;
+let win, tray, popups = [], pluginName, directStartPip = false;
 
 switch (process.platform) {
     case 'win32':
@@ -21,11 +22,32 @@ app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName
 app.commandLine.appendSwitch('ppapi-flash-version', '31.0.0.108');
 
 function createWindow() {
+    if(process.argv.indexOf('--pip') >= 0){
+        let i = -1;
+        process.argv.forEach((val, index) => {
+           if(val && val.toLowerCase().startsWith('pipd://'))
+               i = index;
+        });
+        if(i >= 0) {
+            const url = new URL(process.argv[i]);
+            if(url) {
+                let command = url.hostname;
+                if (command.toLowerCase().startsWith('open')) {
+                    directStartPip = { command, params: url.searchParams };
+                    console.log('Open command detected:', directStartPip);
+                }
+            } else {
+                dialog.showMessageBox({type: 'error', title: 'Internal Error', message: 'Failed to parse the request'});
+            }
+        }
+    }
+    app.setAsDefaultProtocolClient('pipd', `${process.execPath}" "${__dirname}" --pip "`);
     win = new BrowserWindow({
         width: config.WIDTH, height: config.HEIGHT,
         title: 'Picture In Desktop',
         maximizable: false,
         resizable: false,
+        show: !directStartPip
     });
 
     setupIPC();
@@ -60,6 +82,20 @@ function createWindow() {
 
     win.loadFile(config.INDEX_PAGE);
 
+    config.readModules(config.MODULES_DIR, () => {
+        if(directStartPip && directStartPip.params.has('url') && directStartPip.params.has('service')){
+            let service = config.SERVICES[directStartPip.params.get('service')];
+            if(service){
+                let size = {};
+                const url = service.getStreamURL(directStartPip.params.get('url'));
+                if(directStartPip.params.has('width')) size.width = directStartPip.params.get('width');
+                if(directStartPip.params.has('height')) size.height = directStartPip.params.get('height');
+                restartPIP(url, directStartPip.params.get('service'), size, service.controlsYOffset ? service.controlsYOffset : 10,
+                    service.darkMode, directStartPip.params.has('opacity') ? directStartPip.params.get('opacity') : 1);
+            }
+        }
+    });
+
     app.showExitPrompt = true;
     win.on('close', e => {
         if (popups.length > 0 && app.showExitPrompt) {
@@ -83,7 +119,7 @@ function createWindow() {
     win.on('closed', () => closeAll())
 }
 
-function createPopup(url, service, size, force, offsetY, darkMode, opacity) {
+function createPopup(url, service, size, offsetY, darkMode, opacity) {
     let display = electron.screen.getPrimaryDisplay();
     let maxY = display.workAreaSize.height;
 
@@ -94,7 +130,7 @@ function createPopup(url, service, size, force, offsetY, darkMode, opacity) {
         frame: false,
         alwaysOnTop: true,
         webPreferences: { plugins: true },
-        title: `Embed Frame: ${service}`
+        title: `${service} Embed Frame`
     });
 
     popup.setOpacity(opacity);
@@ -146,24 +182,23 @@ function createPopup(url, service, size, force, offsetY, darkMode, opacity) {
         let bounds = popup.getBounds();
         if (bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
         if (bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
-        //if(bounds.y + bounds.height >= maxY - config.MAGNET_REACH) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
         popup.setBounds(bounds);
     });
-    popup.on('closed', () => popups = popups.filter(pp => pp.window !== popup));
+    popup.on('closed', () => {
+        popups = popups.filter(pp => pp.window !== popup);
+        if(popups.length === 0) closeAll();
+    });
 }
 
 function setupIPC(){
-    config.readModules(config.MODULES_DIR);
-    ipcMain.on('bridge-config', function () {
-        win.webContents.send('bridge-config-load', config.SERVICE_CATEGORIES);
-    });
+    ipcMain.on('bridge-config', () => win.webContents.send('bridge-config-load', config.SERVICE_CATEGORIES));
     ipcMain.on('bridge-post', function (e, result) {
         let service = config.SERVICES[result.service];
         if (service) {
             let embedURL = service.getStreamURL(result.streamURL);
             if (embedURL) {
                 console.log('Input URL:', result.streamURL);
-                restartPIP(embedURL, result.service, result.size, result.force === true || service.force, service.controlsYOffset ? service.controlsYOffset : 10, service.darkMode,
+                restartPIP(embedURL, result.service, result.size, service.controlsYOffset ? service.controlsYOffset : 10, service.darkMode,
                     result.opacity);
             } else {
                 win.webContents.send('bridge-error', `Invalid URL for the <strong>${result.service}</strong> service`);
@@ -172,11 +207,11 @@ function setupIPC(){
     });
 }
 
-function restartPIP(url, service, size, force, offY, darkMode, opacity) {
+function restartPIP(url, service, size, offY, darkMode, opacity) {
     win.hide();
     showTray();
     console.log('Embed Stream URI:', url);
-    createPopup(url, service, size, force, offY, darkMode, opacity)
+    createPopup(url, service, size, offY, darkMode, opacity)
 }
 
 function showTray() {
