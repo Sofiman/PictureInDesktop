@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 let config = {
-    VERSION: '0.1.2-pre',
+    VERSION: '0.1.2',
 
     WIDTH: 800,
     HEIGHT: 340,
