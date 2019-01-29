@@ -34,7 +34,7 @@ function createWindow() {
                 let command = url.hostname;
                 if (command.toLowerCase().startsWith('open')) {
                     directStartPip = { command, params: url.searchParams };
-                    console.log('Open command detected:', command, ':' + directStartPip.params.get('sercice'));
+                    console.log('Open command detected:', command, ':', directStartPip.params.get('service'));
                 }
             } else {
                 dialog.showMessageBox({type: 'error', title: 'Internal Error', message: 'Failed to parse the request'});
