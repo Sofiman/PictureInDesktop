@@ -183,7 +183,7 @@ function createPopup(url, service, size, offsetY, darkMode, opacity) {
         if (bounds.x <= config.MAGNET_REACH && bounds.x > 0) bounds.x = config.MAGNET_BOX;
         if (bounds.y <= config.MAGNET_REACH && bounds.y > 0) bounds.y = config.MAGNET_BOX;
         let y = bounds.y + bounds.height;
-        if (y >= maxY - config.MAGNET_REACH*2 && y < maxY) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
+        if (y >= maxY - config.MAGNET_REACH && y < maxY) bounds.y = maxY - config.MAGNET_BOX - bounds.height;
         popup.setBounds(bounds);
     });
     popup.on('closed', () => {
