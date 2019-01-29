@@ -34,7 +34,7 @@ function createWindow() {
                 let command = url.hostname;
                 if (command.toLowerCase().startsWith('open')) {
                     directStartPip = { command, params: url.searchParams };
-                    console.log('Open command detected:', directStartPip);
+                    console.log('Open command detected:', command, ':' + directStartPip.params.get('sercice'));
                 }
             } else {
                 dialog.showMessageBox({type: 'error', title: 'Internal Error', message: 'Failed to parse the request'});
@@ -88,10 +88,10 @@ function createWindow() {
             if(service){
                 let size = {};
                 const url = service.getStreamURL(directStartPip.params.get('url'));
-                if(directStartPip.params.has('width')) size.width = directStartPip.params.get('width');
-                if(directStartPip.params.has('height')) size.height = directStartPip.params.get('height');
+                if(directStartPip.params.has('width')) size.width = parseInt(directStartPip.params.get('width'));
+                if(directStartPip.params.has('height')) size.height = parseInt(directStartPip.params.get('height'));
                 restartPIP(url, directStartPip.params.get('service'), size, service.controlsYOffset ? service.controlsYOffset : 10,
-                    service.darkMode, directStartPip.params.has('opacity') ? directStartPip.params.get('opacity') : 1);
+                    service.darkMode, directStartPip.params.has('opacity') ? parseFloat(directStartPip.params.get('opacity'))/100 : 1);
             }
         }
     });
