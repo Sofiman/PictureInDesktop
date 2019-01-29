@@ -13,7 +13,7 @@ let config = {
     INDEX_PAGE: 'render/index.html',
     EMBED_PAGE: 'render/embed.html',
     ABOUT_PAGE: 'render/about.html',
-    TRAY_ICON: 'render/tray.png',
+    TRAY_ICON: 'render/assets/tray.png',
     MODULES_DIR: 'services',
 
     SERVICES: {
